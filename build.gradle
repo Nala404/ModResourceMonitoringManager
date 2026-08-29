@@ -1,0 +1,63 @@
+plugins {
+    id 'java'
+    id 'maven-publish'
+}
+
+version = project.mod_version
+group = project.maven_group
+
+base {
+    archivesName = project.archives_base_name
+}
+
+dependencies {
+    // Minecraft 与 Fabric 运行时由游戏提供，这里只作为编译类路径，不打包进 Mod。
+    compileOnly files("Minecraft/${project.minecraft_version}-${project.loader_version}/${project.minecraft_version}-${project.loader_version}.jar")
+    compileOnly "net.fabricmc:fabric-loader:${project.loader_version}"
+    compileOnly "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+    compileOnly "net.fabricmc.fabric-api:fabric-command-api-v2:${project.fabric_command_api_version}"
+    compileOnly "net.fabricmc.fabric-api:fabric-key-mapping-api-v1:${project.fabric_key_mapping_api_version}"
+    compileOnly "net.fabricmc.fabric-api:fabric-lifecycle-events-v1:${project.fabric_lifecycle_events_api_version}"
+    compileOnly "com.mojang:brigadier:1.3.10"
+    compileOnly "org.lwjgl:lwjgl-glfw:3.4.1"
+    compileOnly "com.google.code.gson:gson:2.13.2"
+    compileOnly "org.jspecify:jspecify:1.0.0"
+    compileOnly "it.unimi.dsi:fastutil:8.5.18"
+
+}
+
+processResources {
+    inputs.property "version", project.version
+    inputs.property "minecraft_version", project.minecraft_version
+
+    filesMatching("fabric.mod.json") {
+        expand "version": project.version, "minecraft_version": project.minecraft_version
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    it.options.release = 25
+}
+
+java {
+    withSourcesJar()
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(26)
+    }
+    sourceCompatibility = JavaVersion.toVersion(25)
+    targetCompatibility = JavaVersion.toVersion(25)
+}
+
+jar {
+    from("LICENSE") {
+        rename { "${it}_${project.base.archivesName.get()}" }
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
+}

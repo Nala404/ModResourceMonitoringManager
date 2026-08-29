@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "id": "modresourcemanager",
+  "version": "${version}",
+  "name": "MRM Fabric ${version}",
+  "description": "Windows task-manager style resource monitor for Minecraft mods.",
+  "authors": [
+    "ModResourceManager contributors"
+  ],
+  "contact": {},
+  "license": "MIT",
+  "icon": "assets/modresourcemanager/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "com.modresourcemanager.client.ModResourceManagerClient"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.19.0",
+    "fabric-api": "*",
+    "minecraft": "~${minecraft_version}"
+  },
+  "suggests": {
+    "modmenu": "*",
+    "tweakeroo": "*",
+    "malilib": "*",
+    "litematica": "*",
+    "itemscroller": "*",
+    "minihud": "*",
+    "sodium": "*",
+    "lithium": "*",
+    "iris": "*",
+    "c2me": "*",
+    "ferritecore": "*"
+  }
+}
